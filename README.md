@@ -9,4 +9,4 @@ Designing a simple programming language using Lex and Yacc
   
   -Parser   : Bison
   
-  -Compiler : GCC
+  -Compiler : TDM-GCC MinGW
