@@ -1,6 +1,9 @@
 # Compilers-Project
 
-#Tools:
+# Tools:
+
   -Lexer    : Flex
+  
   -Parser   : Bison
+  
   -Compiler : GCC
