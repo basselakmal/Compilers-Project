@@ -7,7 +7,7 @@
 
 -To test your installation, open CMD and type "flex --help" or "bison --help".
 
-# Batch File
+# Batch File:
 
 -You may use the batch file (test.bat), it's a shortcut for flex + bison + gcc and then runs the output file.
 
