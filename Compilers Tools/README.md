@@ -1,11 +1,10 @@
 # Instructions:
 
--Install 3 files to : C:\GnuWin32
+-Install 3 files (bison-2.4.1-setup.exe - flex-2.5.4a-1.exe - tdm64-gcc-5.1.0-2.exe) to : C:\GnuWin32
 
 -Add the path "C:\GnuWin32\bin" to your "Path" variable in the System Environment Variables.
 
-
--To test your installation, open CMD and type "flex --help" or "bison --help".
+-To test your installation, open CMD and try both commands "flex --help" and "bison --help".
 
 # Batch File:
 
