@@ -45,40 +45,6 @@ void yyerror(char *s){
 	fprintf(stderr, "%s\n", s);
 }
 
-double calcArith(double op1, char* op, double op2){
-	
-	if(!strcmp(op, "+"))
-		return op1 + op2;
-	if(!strcmp(op, "-"))
-		return op1 - op2;
-	if(!strcmp(op, "*"))
-		return op1 * op2;
-	if(!strcmp(op, "/"))
-		return op1 / op2;
-}
-
-int calcLogic(int op1, char* op, int op2){
-
-	if(!strcmp(op, "=="))
-		return op1 == op2;
-	if(!strcmp(op, "!="))
-		return op1 != op2;
-	if(!strcmp(op, ">"))
-		return op1 > op2;
-	if(!strcmp(op, "<"))
-		return op1 < op2;
-	if(!strcmp(op, "<="))
-		return op1 <= op2;
-	if(!strcmp(op, ">="))
-		return op1 >= op2;
-		
-		
-	if(!strcmp(op, "&&"))
-		return op1 && op2;
-	if(!strcmp(op, "||"))
-		return op1 || op2;
-}
-
 int main(void){
 	yyparse();
 	return 0;
