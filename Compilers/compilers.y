@@ -9,24 +9,31 @@
 	int calcLogic(int op1, char* op, int op2);
 %}
 
-%token Keyword String Integer Float Constant BoolValue Delimiter AddSub MulDiv Bracket Comparison LogicOp Identifier Assignment 
+%token Keyword String Integer Float Constant BoolValue Delimiter AddSub MulDiv OpenBracket CloseBracket Comparison LogicOp Identifier Assignment 
+
+%token For
 
 %%
 program : line program |;
-line :  var {printf("Variable Declaration\n");} |
-		assign {printf("Assignment Operation\n");};
+line :  var Delimiter{printf("Variable Declaration\n");} |
+		for_loop {printf("For Loop\n");}|
+		assign Delimiter{printf("Assignment Operation\n");};
 
+for_loop:	For OpenBracket var Delimiter expr Delimiter assign CloseBracket line |
+			For OpenBracket assign Delimiter expr Delimiter assign CloseBracket line;
 		
-var	 :		Constant Keyword Identifier Assignment expr Delimiter 	| Keyword Identifier Assignment expr Delimiter |
-			Constant Keyword Identifier Delimiter					| Keyword Identifier Delimiter;
+		
+var	 :		Constant Keyword assign 	| Keyword assign |
+			Constant Keyword Identifier	| Keyword Identifier;
+			
 
-assign : 	Identifier Assignment expr Delimiter;
+assign : 	Identifier Assignment expr | Identifier Assignment String;
 		
-expr : 		String | term | expr AddSub term | expr LogicOp term;
+expr : 		term | expr AddSub term | expr LogicOp term;
 		
 term :		factor | term MulDiv factor | term Comparison factor;
 			
-factor :	Bracket expr Bracket | BoolValue | Float | Integer | Identifier;	
+factor :	OpenBracket expr CloseBracket | BoolValue | Float | Integer | Identifier;	
 
 		
 %%
