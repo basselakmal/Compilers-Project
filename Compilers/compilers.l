@@ -19,7 +19,7 @@
 ("while")									{return While;}
 ("int"|"char"|"string"|"float"|"bool")		{yylval = strdup(yytext); return Keyword;}
 ("const")									{return Constant;}
-("true"|"false")							{yylval = strdup(yytext); return BoolValue;}
+("true"|"false")							{yylval = strdup(yytext); return Bool;}
 
 ("(")										{return OpenBracket;}
 (")")										{return CloseBracket;}
