@@ -5,8 +5,6 @@
 	
 	int yylex(void);
 	void yyerror(char *);
-	double calcArith(double op1, char* op, double op2);
-	int calcLogic(int op1, char* op, int op2);
 %}
 
 %token Keyword String Integer Float Constant BoolValue Delimiter AddSub MulDiv OpenBracket CloseBracket Comparison LogicOp Identifier Assignment 
