@@ -7,7 +7,9 @@
 	void yyerror(char *);
 %}
 
-%token Keyword String Integer Float Constant BoolValue Delimiter AddSub MulDiv OpenBracket CloseBracket Comparison LogicOp Identifier Assignment 
+%token Keyword Identifier Delimiter AddSub MulDiv OpenBracket CloseBracket Assignment Comparison LogicOp 
+
+%token String Integer Float Constant Bool  
 
 %token For While If Then Else Switch Case Colon Repeat Until
 
