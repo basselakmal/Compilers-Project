@@ -1,13 +1,19 @@
 %{
 	#include "y.tab.h"
 	#include <string.h>
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wint-conversion"
 %}
 %%
 
-("if"|"then"|"else"|"while"|"repeat"|"until"|"for"|"switch"|"break") 		{yylval = strdup(yytext); return Keyword;}
+("if"|"then"|"else"|"while"|"repeat"|"until"|"switch"|"break") 				{yylval = strdup(yytext); return Keyword;}
+("for")																		{return For;}
 ("int"|"char"|"string"|"float"|"bool")			 							{yylval = strdup(yytext); return Keyword;}
 ("const")																	{return Constant;}
-("true"|"false")																{yylval = strdup(yytext); return BoolValue;}
+("true"|"false")															{yylval = strdup(yytext); return BoolValue;}
+
+("(")																		{return OpenBracket;}
+(")")																		{return CloseBracket;}
 
 ("=")																		{return Assignment;}
 [a-zA-Z_][a-zA-Z0-9_]*														{yylval = strdup(yytext); return Identifier;}		
@@ -22,7 +28,7 @@
 ("\*"|"/")																	{yylval = strdup(yytext); return MulDiv;}
 ("/"\*(\n|[^\*"/"])*\*"/")											
 ("//".*)															
-("("|")")																	{return Bracket;}
+
 ("=="|"!="|">"|"<"|">="|"<=")												{yylval = strdup(yytext); return Comparison;}
 ("&&"|"\|\|")																{yylval = strdup(yytext); return LogicOp;}
 
