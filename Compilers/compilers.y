@@ -11,7 +11,7 @@
 
 %token Keyword String Integer Float Constant BoolValue Delimiter AddSub MulDiv OpenBracket CloseBracket Comparison LogicOp Identifier Assignment 
 
-%token For While
+%token For While If Then Else Switch Case Colon Repeat Until
 
 %%
 program : line program |;
