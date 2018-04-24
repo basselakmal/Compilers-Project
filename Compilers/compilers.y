@@ -11,16 +11,19 @@
 
 %token Keyword String Integer Float Constant BoolValue Delimiter AddSub MulDiv OpenBracket CloseBracket Comparison LogicOp Identifier Assignment 
 
-%token For
+%token For While
 
 %%
 program : line program |;
 line :  var Delimiter{printf("Variable Declaration\n");} |
-		for_loop {printf("For Loop\n");}|
+		for_loop {printf("For Loop\n");} |
+		while_loop {printf("While Loop\n");} |
 		assign Delimiter{printf("Assignment Operation\n");};
 
 for_loop:	For OpenBracket var Delimiter expr Delimiter assign CloseBracket line |
 			For OpenBracket assign Delimiter expr Delimiter assign CloseBracket line;
+
+while_loop: While OpenBracket expr CloseBracket line;
 		
 		
 var	 :		Constant Keyword assign 	| Keyword assign |
