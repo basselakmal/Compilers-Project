@@ -6,8 +6,9 @@
 %}
 %%
 
-("if"|"then"|"else"|"while"|"repeat"|"until"|"switch"|"break") 				{yylval = strdup(yytext); return Keyword;}
+("if"|"then"|"else"|"repeat"|"until"|"switch")		 						{yylval = strdup(yytext); return Keyword;}
 ("for")																		{return For;}
+("while")																	{return While;}
 ("int"|"char"|"string"|"float"|"bool")			 							{yylval = strdup(yytext); return Keyword;}
 ("const")																	{return Constant;}
 ("true"|"false")															{yylval = strdup(yytext); return BoolValue;}
