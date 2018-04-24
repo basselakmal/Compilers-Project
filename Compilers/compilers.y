@@ -36,7 +36,7 @@ expr : 		term | expr AddSub term | expr LogicOp term;
 		
 term :		factor | term MulDiv factor | term Comparison factor;
 			
-factor :	OpenBracket expr CloseBracket | BoolValue | Float | Integer | Identifier;	
+factor :	OpenBracket expr CloseBracket | Bool | Float | Integer | Identifier;	
 
 		
 %%
