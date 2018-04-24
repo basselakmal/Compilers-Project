@@ -6,32 +6,40 @@
 %}
 %%
 
-("if"|"then"|"else"|"repeat"|"until"|"switch")		 						{yylval = strdup(yytext); return Keyword;}
-("for")																		{return For;}
-("while")																	{return While;}
-("int"|"char"|"string"|"float"|"bool")			 							{yylval = strdup(yytext); return Keyword;}
-("const")																	{return Constant;}
-("true"|"false")															{yylval = strdup(yytext); return BoolValue;}
+("if")										{return If;}
+("then")									{return Then;}
+("else")									{return Else;}
+("switch")									{return Switch;}
+("case")									{return Case;}
+(":")										{return Colon;}
+("repeat")									{return Repeat;}
+("until")									{return Until;}
 
-("(")																		{return OpenBracket;}
-(")")																		{return CloseBracket;}
+("for")										{return For;}
+("while")									{return While;}
+("int"|"char"|"string"|"float"|"bool")		{yylval = strdup(yytext); return Keyword;}
+("const")									{return Constant;}
+("true"|"false")							{yylval = strdup(yytext); return BoolValue;}
 
-("=")																		{return Assignment;}
-[a-zA-Z_][a-zA-Z0-9_]*														{yylval = strdup(yytext); return Identifier;}		
+("(")										{return OpenBracket;}
+(")")										{return CloseBracket;}
 
-(\".*\") 																	{yylval = strdup(yytext); return String;}
-[0-9]+\.[0-9]+																{yylval = atof(yytext); return Float;}
-[0-9]+																		{yylval = atoi(yytext); return Integer;}
+("=")										{return Assignment;}
+[a-zA-Z_][a-zA-Z0-9_]*						{yylval = strdup(yytext); return Identifier;}		
 
-(";")																		{return Delimiter;}
+(\".*\") 									{yylval = strdup(yytext); return String;}
+[0-9]+\.[0-9]+								{yylval = atof(yytext); return Float;}
+[0-9]+										{yylval = atoi(yytext); return Integer;}
 
-("\+"|"-")																	{yylval = strdup(yytext); return AddSub;}
-("\*"|"/")																	{yylval = strdup(yytext); return MulDiv;}
+(";")										{return Delimiter;}
+
+("\+"|"-")									{yylval = strdup(yytext); return AddSub;}
+("\*"|"/")									{yylval = strdup(yytext); return MulDiv;}
 ("/"\*(\n|[^\*"/"])*\*"/")											
 ("//".*)															
 
-("=="|"!="|">"|"<"|">="|"<=")												{yylval = strdup(yytext); return Comparison;}
-("&&"|"\|\|")																{yylval = strdup(yytext); return LogicOp;}
+("=="|"!="|">"|"<"|">="|"<=")				{yylval = strdup(yytext); return Comparison;}
+("&&"|"\|\|")								{yylval = strdup(yytext); return LogicOp;}
 
 [ \t\n]+
 %%
