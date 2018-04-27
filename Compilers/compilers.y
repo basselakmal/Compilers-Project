@@ -13,6 +13,8 @@
 
 %token For While If Then Else Switch Case Colon Repeat Until Break Default
 
+%token OpenCurlyBrace CloseCurlyBrace Comma Return
+
 %nonassoc LOWER_THAN_ELSE
 %nonassoc Else;
 
@@ -23,6 +25,8 @@ line :  var Delimiter{printf("Variable Declaration\n");} |
 		while_loop {printf("While Loop\n");} |
 		stmt {printf("If statement\n");}|
 		switch_case{printf("switch case\n");} |
+		block {printf("Block\n");} |
+		function {printf("Function\n");} |
 		assign Delimiter{printf("Assignment Operation\n");};
 
 for_loop:	For OpenBracket var Delimiter expr Delimiter assign CloseBracket line |
@@ -53,6 +57,21 @@ case_switch: case_struct case_switch | Default line;
 case_struct: Case OpenBracket type CloseBracket Colon line Break Delimiter;
 
 type: Integer | Float | String;
+
+block: 	OpenCurlyBrace program CloseCurlyBrace ;
+
+function_block: OpenCurlyBrace program Return Identifier Delimiter CloseCurlyBrace
+                |OpenCurlyBrace program CloseCurlyBrace;
+
+function: Keyword Identifier OpenBracket parameters CloseBracket function_block |
+Constant Keyword Identifier OpenBracket parameters CloseBracket function_block ;
+
+
+parameters: parameter | ;
+parameter: parameter_name multipleparam;
+parameter_name: Constant Keyword Identifier	| Keyword Identifier;
+
+multipleparam: Comma parameter |;		
  	  
 %%
 

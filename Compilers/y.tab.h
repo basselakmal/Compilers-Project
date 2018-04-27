@@ -66,7 +66,11 @@
      Until = 282,
      Break = 283,
      Default = 284,
-     LOWER_THAN_ELSE = 285
+     OpenCurlyBrace = 285,
+     CloseCurlyBrace = 286,
+     Comma = 287,
+     Return = 288,
+     LOWER_THAN_ELSE = 289
    };
 #endif
 /* Tokens.  */
@@ -97,7 +101,11 @@
 #define Until 282
 #define Break 283
 #define Default 284
-#define LOWER_THAN_ELSE 285
+#define OpenCurlyBrace 285
+#define CloseCurlyBrace 286
+#define Comma 287
+#define Return 288
+#define LOWER_THAN_ELSE 289
 
 
 
