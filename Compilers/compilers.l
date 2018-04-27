@@ -16,6 +16,8 @@
 ("until")									{return Until;}
 
 ("for")										{return For;}
+("break")									{return Break;}
+("default")								    {return Default;}
 ("while")									{return While;}
 ("int"|"char"|"string"|"float"|"bool")		{yylval = strdup(yytext); return Keyword;}
 ("const")									{return Constant;}

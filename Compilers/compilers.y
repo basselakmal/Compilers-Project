@@ -11,13 +11,18 @@
 
 %token String Integer Float Constant Bool  
 
-%token For While If Then Else Switch Case Colon Repeat Until
+%token For While If Then Else Switch Case Colon Repeat Until Break Default
+
+%nonassoc LOWER_THAN_ELSE
+%nonassoc Else;
 
 %%
 program : line program |;
 line :  var Delimiter{printf("Variable Declaration\n");} |
 		for_loop {printf("For Loop\n");} |
 		while_loop {printf("While Loop\n");} |
+		stmt {printf("If statement\n");}|
+		switch_case{printf("switch case\n");} |
 		assign Delimiter{printf("Assignment Operation\n");};
 
 for_loop:	For OpenBracket var Delimiter expr Delimiter assign CloseBracket line |
@@ -26,7 +31,7 @@ for_loop:	For OpenBracket var Delimiter expr Delimiter assign CloseBracket line 
 while_loop: While OpenBracket expr CloseBracket line;
 		
 		
-var	 :		Constant Keyword assign 	| Keyword assign |
+var	 :		Constant Keyword assign 	| Keyword assign|
 			Constant Keyword Identifier	| Keyword Identifier;
 			
 
@@ -36,9 +41,19 @@ expr : 		term | expr AddSub term | expr LogicOp term;
 		
 term :		factor | term MulDiv factor | term Comparison factor;
 			
-factor :	OpenBracket expr CloseBracket | Bool | Float | Integer | Identifier;	
+factor :	OpenBracket expr CloseBracket | Bool | Float | Integer | Identifier;
 
-		
+stmt: If OpenBracket expr CloseBracket Then line  %prec LOWER_THAN_ELSE;
+      | If OpenBracket expr CloseBracket Then line Else line;
+
+switch_case: Switch OpenBracket Identifier CloseBracket case_switch;
+
+case_switch: case_struct case_switch | Default line;
+
+case_struct: Case OpenBracket type CloseBracket Colon line Break Delimiter;
+
+type: Integer | Float | String;
+ 	  
 %%
 
 void yyerror(char *s){
