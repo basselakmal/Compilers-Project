@@ -15,6 +15,8 @@
 ("repeat")									{return Repeat;}
 ("until")									{return Until;}
 ("return")									{return Return;}
+("start")									{return Start;}
+
 
 ("for")										{return For;}
 ("break")									{return Break;}
@@ -27,10 +29,14 @@
 ("(")										{return OpenBracket;}
 (")")										{return CloseBracket;}
 
+
 ("{")										{return OpenCurlyBrace;}
 ("}")										{return CloseCurlyBrace;}
 
+("main")										{return Main;}
+
 ("=")										{return Assignment;}
+("zero")									{return Zero;}
 [a-zA-Z_][a-zA-Z0-9_]*						{yylval = strdup(yytext); return Identifier;}		
 
 (\".*\") 									{yylval = strdup(yytext); return String;}

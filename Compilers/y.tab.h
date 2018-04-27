@@ -70,7 +70,10 @@
      CloseCurlyBrace = 286,
      Comma = 287,
      Return = 288,
-     LOWER_THAN_ELSE = 289
+     Zero = 289,
+     Main = 290,
+     Start = 291,
+     LOWER_THAN_ELSE = 292
    };
 #endif
 /* Tokens.  */
@@ -105,7 +108,10 @@
 #define CloseCurlyBrace 286
 #define Comma 287
 #define Return 288
-#define LOWER_THAN_ELSE 289
+#define Zero 289
+#define Main 290
+#define Start 291
+#define LOWER_THAN_ELSE 292
 
 
 

@@ -13,13 +13,14 @@
 
 %token For While If Then Else Switch Case Colon Repeat Until Break Default
 
-%token OpenCurlyBrace CloseCurlyBrace Comma Return
+%token OpenCurlyBrace CloseCurlyBrace Comma Return Zero Main Start;
 
 %nonassoc LOWER_THAN_ELSE
 %nonassoc Else;
 
 %%
-program : line program |;
+program_init: Start Main OpenBracket CloseBracket OpenCurlyBrace program Return Zero Delimiter CloseCurlyBrace{printf("program finished\n");};
+program : line program | ;
 line :  var Delimiter{printf("Variable Declaration\n");} |
 		for_loop {printf("For Loop\n");} |
 		while_loop {printf("While Loop\n");} |
@@ -47,8 +48,8 @@ term :		factor | term MulDiv factor | term Comparison factor;
 			
 factor :	OpenBracket expr CloseBracket | Bool | Float | Integer | Identifier;
 
-stmt: If OpenBracket expr CloseBracket Then line  %prec LOWER_THAN_ELSE;
-      | If OpenBracket expr CloseBracket Then line Else line;
+stmt: If OpenBracket expr CloseBracket Then block  %prec LOWER_THAN_ELSE;
+      | If OpenBracket expr CloseBracket Then block Else block;
 
 switch_case: Switch OpenBracket Identifier CloseBracket case_switch;
 
