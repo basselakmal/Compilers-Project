@@ -1,0 +1,30 @@
+int x = 6;
+bool y = (x < 6);
+
+if (y == true) then
+y = false;
+else
+y = true;
+
+while (y == true && x > 2)
+x = 2;
+
+switch (x)
+case 1:
+y = true;
+break;
+
+case 2:
+y = false;
+break;
+
+default:
+y = true;
+
+string z = "Hello World!";
+float A = 5.76;
+float B = A + 2.87;
+
+if (B >5) then
+for(int i=0; i<5; i=i+1)
+x = x +1;
