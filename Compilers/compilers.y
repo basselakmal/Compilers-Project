@@ -13,33 +13,39 @@
 
 %token For While If Then Else Switch Case Colon Repeat Until Break Default
 
-%token OpenCurlyBrace CloseCurlyBrace Comma Return Zero Main Start;
-
 %nonassoc LOWER_THAN_ELSE
 %nonassoc Else;
 
-
 %%
-program_init: Start Main OpenBracket CloseBracket OpenCurlyBrace program Return Zero Delimiter CloseCurlyBrace{printf("program finished\n");};
-program : line program | ;
+program : line program |;
 line :  var Delimiter{printf("Variable Declaration\n");} |
 		for_loop {printf("For Loop\n");} |
 		while_loop {printf("While Loop\n");} |
-		stmt {printf("If statement\n");} |
-		switch_case{printf("switch case\n");} |
-		block {printf("Block\n");} |
-		function {printf("Function\n");} |
 		repeat_until {printf("Repeat Until\n");} |
+		stmt {printf("If Statement\n");} |
+		switch_case{printf("Switch Case\n");} |
 		assign Delimiter{printf("Assignment Operation\n");};
 
 for_loop:	For OpenBracket var Delimiter expr Delimiter assign CloseBracket line |
 			For OpenBracket assign Delimiter expr Delimiter assign CloseBracket line;
 
-while_loop: While OpenBracket expr CloseBracket line;		
-		
+while_loop: While OpenBracket expr CloseBracket line;
+
 repeat_until: Repeat line Until expr Delimiter;
+
+stmt: If OpenBracket expr CloseBracket Then line  %prec LOWER_THAN_ELSE;
+      | If OpenBracket expr CloseBracket Then line Else line;
+	  
+switch_case: Switch OpenBracket Identifier CloseBracket case_switch;
+
+case_switch: case_struct case_switch | Default Colon line;
+
+case_struct: Case type Colon line Break Delimiter;
+
+type: Integer | Float | String;
+	  
 		
-var	 :		Constant Keyword assign 	| Keyword assign|
+var	 :		Constant Keyword assign 	| Keyword assign |
 			Constant Keyword Identifier	| Keyword Identifier;
 			
 
@@ -49,34 +55,9 @@ expr : 		term | expr AddSub term | expr LogicOp term;
 		
 term :		factor | term MulDiv factor | term Comparison factor;
 			
-factor :	OpenBracket expr CloseBracket | Bool | Float | Integer | Identifier;
+factor :	OpenBracket expr CloseBracket | Bool | Float | Integer | Identifier;	
 
-stmt: If OpenBracket expr CloseBracket Then block  %prec LOWER_THAN_ELSE;
-      | If OpenBracket expr CloseBracket Then block Else block;
-
-switch_case: Switch OpenBracket Identifier CloseBracket case_switch;
-
-case_switch: case_struct case_switch | Default line;
-
-case_struct: Case OpenBracket type CloseBracket Colon line Break Delimiter;
-
-type: Integer | Float | String;
-
-block: 	OpenCurlyBrace program CloseCurlyBrace ;
-
-function_block: OpenCurlyBrace program Return Identifier Delimiter CloseCurlyBrace
-                |OpenCurlyBrace program CloseCurlyBrace;
-
-function: Keyword Identifier OpenBracket parameters CloseBracket function_block |
-Constant Keyword Identifier OpenBracket parameters CloseBracket function_block ;
-
-
-parameters: parameter | ;
-parameter: parameter_name multipleparam;
-parameter_name: Constant Keyword Identifier	| Keyword Identifier;
-
-multipleparam: Comma parameter |;		
- 	  
+		
 %%
 
 void yyerror(char *s){
