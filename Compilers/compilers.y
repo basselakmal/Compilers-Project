@@ -22,62 +22,62 @@
 
 %%
 
-start : function start | global_var start |;
+start		:	function start | global_var start |;
 
-global_var	: var Delimiter {printf("//Global Variable Declaration\n");};
-function : func_str {printf("//%s Function\n", $1);};
+global_var	:	var Delimiter {printf("//Global Variable Declaration\n");};
+function	:	func_str {printf("//%s Function\n", $1);};
 
-multiline : line multiline | ;
+multiline	:	line multiline | ;
 
-line :  var Delimiter{printf("//Variable Declaration\n\n");} |
-		for_loop {printf("//For Loop\n\n");} |
-		while_loop {printf("//While Loop\n\n");} |
-		repeat_until {printf("//Repeat Until\n\n");} |
-		stmt {printf("//If Statement\n\n");} |
-		switch_case {printf("//Switch Case\n\n");} |
-		func_call Delimiter {printf("//Function Call\n\n");} |
-		assign Delimiter {printf("//Assignment Operation\n\n");};
+line		:	var Delimiter{printf("//Variable Declaration\n\n");} |
+				for_loop {printf("//For Loop\n\n");} |
+				while_loop {printf("//While Loop\n\n");} |
+				repeat_until {printf("//Repeat Until\n\n");} |
+				stmt {printf("//If Statement\n\n");} |
+				switch_case {printf("//Switch Case\n\n");} |
+				func_call Delimiter {printf("//Function Call\n\n");} |
+				assign Delimiter {printf("//Assignment Operation\n\n");};
 
-for_loop:	For OpenBracket var Delimiter expr Delimiter assign CloseBracket Block |
-			For OpenBracket assign Delimiter expr Delimiter assign CloseBracket Block;
+for_loop	:	For OpenBracket var Delimiter expr Delimiter assign CloseBracket Block |
+				For OpenBracket assign Delimiter expr Delimiter assign CloseBracket Block;
 
-while_loop: While OpenBracket expr CloseBracket Block;
+while_loop	:	While OpenBracket expr CloseBracket Block;
 
-repeat_until: Repeat Block Until expr Delimiter;
+repeat_until:	Repeat Block Until expr Delimiter;
 
-stmt: If OpenBracket expr CloseBracket Block  %prec LOWER_THAN_ELSE;
-      | If OpenBracket expr CloseBracket Block Else Block;
+stmt		:	If OpenBracket expr CloseBracket Block  %prec LOWER_THAN_ELSE |
+				If OpenBracket expr CloseBracket Block Else Block;
 	  
-switch_case: Switch OpenBracket Identifier CloseBracket OpenCurlyBrace case_switch CloseCurlyBrace;
+switch_case	:	Switch OpenBracket Identifier CloseBracket OpenCurlyBrace case_switch CloseCurlyBrace;
 
-case_switch: case_struct case_switch | Default Colon multiline;
+case_switch	:	case_struct case_switch | Default Colon multiline;
 
-case_struct: Case expr Colon multiline Break Delimiter;
+case_struct	:	Case expr Colon multiline Break Delimiter;
 
-func_str :	Keyword Identifier OpenBracket params CloseBracket OpenCurlyBrace multiline Return expr Delimiter CloseCurlyBrace {$$=$2;}|
-            Void Identifier OpenBracket params CloseBracket OpenCurlyBrace multiline CloseCurlyBrace {$$=$2;}|
-			Void Identifier OpenBracket CloseBracket OpenCurlyBrace multiline CloseCurlyBrace {$$=$2;}|
-			Keyword Identifier OpenBracket CloseBracket OpenCurlyBrace multiline Return expr Delimiter CloseCurlyBrace {$$=$2;};
+func_str	:	Keyword Identifier OpenBracket params CloseBracket OpenCurlyBrace multiline Return expr Delimiter CloseCurlyBrace {$$=$2;}|
+				Void Identifier OpenBracket params CloseBracket OpenCurlyBrace multiline CloseCurlyBrace {$$=$2;}|
+				Void Identifier OpenBracket CloseBracket OpenCurlyBrace multiline CloseCurlyBrace {$$=$2;}|
+				Keyword Identifier OpenBracket CloseBracket OpenCurlyBrace multiline Return expr Delimiter CloseCurlyBrace {$$=$2;};
 
-func_call : Identifier OpenBracket call_params CloseBracket | Identifier OpenBracket CloseBracket;
+func_call	:	Identifier OpenBracket call_params CloseBracket | Identifier OpenBracket CloseBracket;
 
-call_params : Identifier Comma params | Identifier;
+call_params	:	Identifier Comma params | Identifier;
 			
-params	 :	Keyword Identifier | Constant Keyword Identifier | Keyword Identifier Comma params | Constant Keyword Identifier Comma params;	  
+params		:	Keyword Identifier | Constant Keyword Identifier | Keyword Identifier Comma params | Constant Keyword Identifier Comma params;	  
 		
-var	 :		Constant Keyword assign 	| Keyword assign |
-			Constant Keyword Identifier	| Keyword Identifier;
+var			:	Constant Keyword assign 	| Keyword assign |
+				Constant Keyword Identifier	| Keyword Identifier;
 			
 
-assign : 	Identifier Assignment expr;
+assign 		: 	Identifier Assignment expr;
 		
-expr : 		term | expr AddSub term | expr LogicOp term;
+expr 		:	term | expr AddSub term | expr LogicOp term;
 		
-term :		factor | term MulDiv factor | term Comparison factor;
+term 		:	factor | term MulDiv factor | term Comparison factor;
 			
-factor :	OpenBracket expr CloseBracket | Bool | Float | Integer | String| Identifier | func_call;
+factor 		:	OpenBracket expr CloseBracket | Bool | Float | Integer | String| Identifier | func_call;
 
-Block	:	OpenCurlyBrace multiline CloseCurlyBrace | line;	
+Block		:	OpenCurlyBrace multiline CloseCurlyBrace | line;	
 
 		
 %%
