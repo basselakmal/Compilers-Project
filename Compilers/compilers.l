@@ -24,6 +24,13 @@
 ("(")										{return OpenBracket;}
 (")")										{return CloseBracket;}
 
+
+("{")										{return OpenCurlyBrace;}
+("}")										{return CloseCurlyBrace;}
+
+
+("void")										{return Void;}
+
 ("=")										{return Assignment;}
 [a-zA-Z_][a-zA-Z0-9_]*						{yylval = strdup(yytext); return Identifier;}		
 
@@ -32,6 +39,8 @@
 [0-9]+										{yylval = atoi(yytext); return Integer;}
 
 (";")										{return Delimiter;}
+
+(",")										{return Comma;}
 
 ("\+"|"-")									{yylval = strdup(yytext); return AddSub;}
 ("\*"|"/")									{yylval = strdup(yytext); return MulDiv;}
