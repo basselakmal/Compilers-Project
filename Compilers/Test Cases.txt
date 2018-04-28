@@ -4,14 +4,20 @@ bool y = (x < 6);
 if (y == true) then
 y = false;
 else
+{
 y = true;
+x = 8;
+}
+
 
 while (y == true && x > 2)
 x = 2;
 
 switch (x)
+{
 case 1:
 y = true;
+x = 2;
 break;
 
 case 2:
@@ -20,11 +26,18 @@ break;
 
 default:
 y = true;
+x = 2;
+}
 
 string z = "Hello World!";
 float A = 5.76;
 float B = A + 2.87;
 
 if (B >5) then
+{
 for(int i=0; i<5; i=i+1)
 x = x +1;
+z = "Welcome to Our Compiler!";
+}
+
+z = "Thank you!";
