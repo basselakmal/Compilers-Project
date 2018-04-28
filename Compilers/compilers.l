@@ -34,8 +34,8 @@
 [a-zA-Z_][a-zA-Z0-9_]*						{yylval = strdup(yytext); return Identifier;}		
 
 (\".*\") 									{yylval = strdup(yytext); return String;}
-("-")?[0-9]+\.[0-9]+								{yylval = atof(yytext); return Float;}
-("-")?[0-9]+										{yylval = atoi(yytext); return Integer;}
+("-")?[0-9]+\.[0-9]+						{yylval = atof(yytext); return Float;}
+("-")?[0-9]+								{yylval = atoi(yytext); return Integer;}
 
 (";")										{return Delimiter;}
 (",")										{return Comma;}
