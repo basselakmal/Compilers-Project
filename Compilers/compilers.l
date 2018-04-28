@@ -21,6 +21,7 @@
 ("for")										{return For;}
 ("while")									{return While;}
 ("int"|"char"|"string"|"float"|"bool")		{yylval = strdup(yytext); return Keyword;}
+("void")								    {return Void;}
 ("const")									{return Constant;}
 ("true"|"false")							{yylval = strdup(yytext); return Bool;}
 
