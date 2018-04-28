@@ -11,7 +11,7 @@ int getVal()
 	return temp;
 }
 
-int main()
+void main()
 {
 	getVal();
 	int x = getVal();
@@ -57,5 +57,4 @@ int main()
 	}
 
 	z = "Thank you!";
-	return 0;
 }
