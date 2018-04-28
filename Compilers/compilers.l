@@ -18,6 +18,12 @@
 ("default")								    {return Default;}
 ("return")									{return Return;}
 
+("cin")										{return Cin;}
+("cout")									{return Cout;}
+("<<")										{return LeftShift;}
+(">>")										{return RightShift;}
+("endl")									{return Endl;}
+
 ("for")										{return For;}
 ("while")									{return While;}
 ("int"|"char"|"string"|"float"|"bool")		{yylval = strdup(yytext); return Keyword;}
