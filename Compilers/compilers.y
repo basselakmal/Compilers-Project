@@ -7,26 +7,34 @@
 	void yyerror(char *);
 %}
 
-%token Keyword Identifier Delimiter AddSub MulDiv OpenBracket CloseBracket OpenCurlyBrace CloseCurlyBrace Assignment Comparison LogicOp 
+%token Keyword Identifier Delimiter Comma AddSub MulDiv OpenBracket CloseBracket OpenCurlyBrace CloseCurlyBrace Assignment Comparison LogicOp 
 
 %token String Integer Float Constant Bool  
 
-%token For While If Then Else Switch Case Colon Repeat Until Break Default
+%token For While If Then Else Switch Case Colon Repeat Until Break Default Return
 
 %nonassoc LOWER_THAN_ELSE
 %nonassoc Else;
 
+%start start
+
 %%
+
+start : function start | global_var start |;
+
+global_var	: var Delimiter {printf("//Global Variable Declaration\n");};
+function : func_str {printf("//%s Function\n", $1);};
 
 multiline : line multiline | ;
 
-line :  var Delimiter{printf("//Variable Declaration\n");} |
-		for_loop {printf("//For Loop\n");} |
-		while_loop {printf("//While Loop\n");} |
-		repeat_until {printf("//Repeat Until\n");} |
-		stmt {printf("//If Statement\n");} |
-		switch_case{printf("//Switch Case\n");} |
-		assign Delimiter{printf("//Assignment Operation\n");};
+line :  var Delimiter{printf("//Variable Declaration\n\n");} |
+		for_loop {printf("//For Loop\n\n");} |
+		while_loop {printf("//While Loop\n\n");} |
+		repeat_until {printf("//Repeat Until\n\n");} |
+		stmt {printf("//If Statement\n\n");} |
+		switch_case {printf("//Switch Case\n\n");} |
+		func_call Delimiter {printf("//Function Call\n\n");} |
+		assign Delimiter {printf("//Assignment Operation\n\n");};
 
 for_loop:	For OpenBracket var Delimiter expr Delimiter assign CloseBracket Block |
 			For OpenBracket assign Delimiter expr Delimiter assign CloseBracket Block;
@@ -35,29 +43,35 @@ while_loop: While OpenBracket expr CloseBracket Block;
 
 repeat_until: Repeat Block Until expr Delimiter;
 
-stmt: If OpenBracket expr CloseBracket Then Block  %prec LOWER_THAN_ELSE;
-      | If OpenBracket expr CloseBracket Then Block Else Block;
+stmt: If OpenBracket expr CloseBracket Block  %prec LOWER_THAN_ELSE;
+      | If OpenBracket expr CloseBracket Block Else Block;
 	  
 switch_case: Switch OpenBracket Identifier CloseBracket OpenCurlyBrace case_switch CloseCurlyBrace;
 
 case_switch: case_struct case_switch | Default Colon multiline;
 
-case_struct: Case type Colon multiline Break Delimiter;
+case_struct: Case expr Colon multiline Break Delimiter;
 
-type: Integer | Float | String | Bool;
-	  
+func_str :	Keyword Identifier OpenBracket params CloseBracket OpenCurlyBrace multiline Return expr Delimiter CloseCurlyBrace {$$=$2;}|
+			Keyword Identifier OpenBracket CloseBracket OpenCurlyBrace multiline Return expr Delimiter CloseCurlyBrace {$$=$2;};
+
+func_call : Identifier OpenBracket call_params CloseBracket | Identifier OpenBracket CloseBracket;
+
+call_params : Identifier Comma params | Identifier;
+			
+params	 :	Keyword Identifier | Constant Keyword Identifier | Keyword Identifier Comma params | Constant Keyword Identifier Comma params;	  
 		
 var	 :		Constant Keyword assign 	| Keyword assign |
 			Constant Keyword Identifier	| Keyword Identifier;
 			
 
-assign : 	Identifier Assignment expr | Identifier Assignment String;
+assign : 	Identifier Assignment expr;
 		
 expr : 		term | expr AddSub term | expr LogicOp term;
 		
 term :		factor | term MulDiv factor | term Comparison factor;
 			
-factor :	OpenBracket expr CloseBracket | Bool | Float | Integer | Identifier;
+factor :	OpenBracket expr CloseBracket | Bool | Float | Integer | String| Identifier | func_call;
 
 Block	:	OpenCurlyBrace multiline CloseCurlyBrace | line;	
 
