@@ -13,7 +13,7 @@
 
 %token String Integer Float Constant Bool  
 
-%token For While If Then Else Switch Case Colon Repeat Until Break Default Return Void
+%token For While If Then Else Switch Case Colon Repeat Until Break Default Return Void Cin Cout Endl LeftShift RightShift
 
 %nonassoc LOWER_THAN_ELSE
 %nonassoc Else;
@@ -36,7 +36,13 @@ line		:	var Delimiter{printf("//Variable Declaration\n\n");} |
 				stmt {printf("//If Statement\n\n");} |
 				switch_case {printf("//Switch Case\n\n");} |
 				func_call Delimiter {printf("//Function Call\n\n");} |
+				cin Delimiter {printf("//Get User Intput\n\n");} |
+				Cout cout Delimiter {printf("//Print Output\n\n");} |
 				assign Delimiter {printf("//Assignment Operation\n\n");};
+				
+cout		:	cout LeftShift expr | cout LeftShift Endl | ;
+
+cin			:	Cin RightShift Identifier
 
 for_loop	:	For OpenBracket var Delimiter expr Delimiter assign CloseBracket Block |
 				For OpenBracket assign Delimiter expr Delimiter assign CloseBracket Block;
