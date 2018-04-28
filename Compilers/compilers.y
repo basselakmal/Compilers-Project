@@ -7,7 +7,7 @@
 	void yyerror(char *);
 %}
 
-%token Keyword Identifier Delimiter AddSub MulDiv OpenBracket CloseBracket Assignment Comparison LogicOp 
+%token Keyword Identifier Delimiter AddSub MulDiv OpenBracket CloseBracket OpenCurlyBrace CloseCurlyBrace Assignment Comparison LogicOp 
 
 %token String Integer Float Constant Bool  
 
@@ -17,7 +17,9 @@
 %nonassoc Else;
 
 %%
-program : line program |;
+
+multiline : line multiline | ;
+
 line :  var Delimiter{printf("//Variable Declaration\n");} |
 		for_loop {printf("//For Loop\n");} |
 		while_loop {printf("//While Loop\n");} |
@@ -26,23 +28,23 @@ line :  var Delimiter{printf("//Variable Declaration\n");} |
 		switch_case{printf("//Switch Case\n");} |
 		assign Delimiter{printf("//Assignment Operation\n");};
 
-for_loop:	For OpenBracket var Delimiter expr Delimiter assign CloseBracket line |
-			For OpenBracket assign Delimiter expr Delimiter assign CloseBracket line;
+for_loop:	For OpenBracket var Delimiter expr Delimiter assign CloseBracket Block |
+			For OpenBracket assign Delimiter expr Delimiter assign CloseBracket Block;
 
-while_loop: While OpenBracket expr CloseBracket line;
+while_loop: While OpenBracket expr CloseBracket Block;
 
-repeat_until: Repeat line Until expr Delimiter;
+repeat_until: Repeat Block Until expr Delimiter;
 
-stmt: If OpenBracket expr CloseBracket Then line  %prec LOWER_THAN_ELSE;
-      | If OpenBracket expr CloseBracket Then line Else line;
+stmt: If OpenBracket expr CloseBracket Then Block  %prec LOWER_THAN_ELSE;
+      | If OpenBracket expr CloseBracket Then Block Else Block;
 	  
-switch_case: Switch OpenBracket Identifier CloseBracket case_switch;
+switch_case: Switch OpenBracket Identifier CloseBracket OpenCurlyBrace case_switch CloseCurlyBrace;
 
-case_switch: case_struct case_switch | Default Colon line;
+case_switch: case_struct case_switch | Default Colon multiline;
 
-case_struct: Case type Colon line Break Delimiter;
+case_struct: Case type Colon multiline Break Delimiter;
 
-type: Integer | Float | String;
+type: Integer | Float | String | Bool;
 	  
 		
 var	 :		Constant Keyword assign 	| Keyword assign |
@@ -55,7 +57,9 @@ expr : 		term | expr AddSub term | expr LogicOp term;
 		
 term :		factor | term MulDiv factor | term Comparison factor;
 			
-factor :	OpenBracket expr CloseBracket | Bool | Float | Integer | Identifier;	
+factor :	OpenBracket expr CloseBracket | Bool | Float | Integer | Identifier;
+
+Block	:	OpenCurlyBrace multiline CloseCurlyBrace | line;	
 
 		
 %%
