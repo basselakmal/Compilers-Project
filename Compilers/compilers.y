@@ -5,13 +5,15 @@
 	
 	int yylex(void);
 	void yyerror(char *);
+	FILE *yyin;
+
 %}
 
 %token Keyword Identifier Delimiter Comma AddSub MulDiv OpenBracket CloseBracket OpenCurlyBrace CloseCurlyBrace Assignment Comparison LogicOp 
 
 %token String Integer Float Constant Bool  
 
-%token For While If Then Else Switch Case Colon Repeat Until Break Default Return
+%token For While If Then Else Switch Case Colon Repeat Until Break Default Return Void
 
 %nonassoc LOWER_THAN_ELSE
 %nonassoc Else;
@@ -53,6 +55,8 @@ case_switch: case_struct case_switch | Default Colon multiline;
 case_struct: Case expr Colon multiline Break Delimiter;
 
 func_str :	Keyword Identifier OpenBracket params CloseBracket OpenCurlyBrace multiline Return expr Delimiter CloseCurlyBrace {$$=$2;}|
+            Void Identifier OpenBracket params CloseBracket OpenCurlyBrace multiline CloseCurlyBrace {$$=$2;}|
+			Void Identifier OpenBracket CloseBracket OpenCurlyBrace multiline CloseCurlyBrace {$$=$2;}|
 			Keyword Identifier OpenBracket CloseBracket OpenCurlyBrace multiline Return expr Delimiter CloseCurlyBrace {$$=$2;};
 
 func_call : Identifier OpenBracket call_params CloseBracket | Identifier OpenBracket CloseBracket;
@@ -83,6 +87,8 @@ void yyerror(char *s){
 }
 
 int main(void){
+	//yyin = fopen("code.txt", "r");
 	yyparse();
+	//fclose(yyin);
 	return 0;
 }
