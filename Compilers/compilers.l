@@ -26,6 +26,8 @@
 
 ("(")										{return OpenBracket;}
 (")")										{return CloseBracket;}
+("{")										{return OpenCurlyBrace;}
+("}")										{return CloseCurlyBrace;}
 
 ("=")										{return Assignment;}
 [a-zA-Z_][a-zA-Z0-9_]*						{yylval = strdup(yytext); return Identifier;}		
