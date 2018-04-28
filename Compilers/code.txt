@@ -15,6 +15,9 @@ void main()
 {
 	getVal();
 	int x = getVal();
+	
+	cin >> x;
+	
 	bool y = (x < 6);
 
 	if (y == true)
@@ -57,4 +60,5 @@ void main()
 	}
 
 	z = "Thank you!";
+	cout << z << " Bye!" << endl;
 }
