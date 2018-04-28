@@ -18,13 +18,13 @@
 
 %%
 program : line program |;
-line :  var Delimiter{printf("Variable Declaration\n");} |
-		for_loop {printf("For Loop\n");} |
-		while_loop {printf("While Loop\n");} |
-		repeat_until {printf("Repeat Until\n");} |
-		stmt {printf("If Statement\n");} |
-		switch_case{printf("Switch Case\n");} |
-		assign Delimiter{printf("Assignment Operation\n");};
+line :  var Delimiter{printf("//Variable Declaration\n");} |
+		for_loop {printf("//For Loop\n");} |
+		while_loop {printf("//While Loop\n");} |
+		repeat_until {printf("//Repeat Until\n");} |
+		stmt {printf("//If Statement\n");} |
+		switch_case{printf("//Switch Case\n");} |
+		assign Delimiter{printf("//Assignment Operation\n");};
 
 for_loop:	For OpenBracket var Delimiter expr Delimiter assign CloseBracket line |
 			For OpenBracket assign Delimiter expr Delimiter assign CloseBracket line;
