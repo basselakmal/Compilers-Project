@@ -14,27 +14,20 @@
 (":")										{return Colon;}
 ("repeat")									{return Repeat;}
 ("until")									{return Until;}
-("return")									{return Return;}
-("start")									{return Start;}
+("break")									{return Break;}
+("default")								    {return Default;}
 
 
 ("for")										{return For;}
-("break")									{return Break;}
-("default")								    {return Default;}
 ("while")									{return While;}
-("int"|"char"|"string"|"float"|"bool"|"void") {yylval = strdup(yytext); return Keyword;}
+("int"|"char"|"string"|"float"|"bool")		{yylval = strdup(yytext); return Keyword;}
 ("const")									{return Constant;}
 ("true"|"false")							{yylval = strdup(yytext); return Bool;}
 
 ("(")										{return OpenBracket;}
 (")")										{return CloseBracket;}
 
-
-("{")										{return OpenCurlyBrace;}
-("}")										{return CloseCurlyBrace;}
-
 ("=")										{return Assignment;}
-("zero")									{return Zero;}
 [a-zA-Z_][a-zA-Z0-9_]*						{yylval = strdup(yytext); return Identifier;}		
 
 (\".*\") 									{yylval = strdup(yytext); return String;}
@@ -42,8 +35,6 @@
 [0-9]+										{yylval = atoi(yytext); return Integer;}
 
 (";")										{return Delimiter;}
-
-(",")										{return Comma;}
 
 ("\+"|"-")									{yylval = strdup(yytext); return AddSub;}
 ("\*"|"/")									{yylval = strdup(yytext); return MulDiv;}
