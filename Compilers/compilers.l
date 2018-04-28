@@ -33,8 +33,6 @@
 ("{")										{return OpenCurlyBrace;}
 ("}")										{return CloseCurlyBrace;}
 
-("main")										{return Main;}
-
 ("=")										{return Assignment;}
 ("zero")									{return Zero;}
 [a-zA-Z_][a-zA-Z0-9_]*						{yylval = strdup(yytext); return Identifier;}		
