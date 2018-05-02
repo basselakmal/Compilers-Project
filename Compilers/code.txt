@@ -1,5 +1,5 @@
 string test = "hey";
-bool isTrue = false;
+const bool isTrue = false;
 
 int getVal()
 {
@@ -58,6 +58,12 @@ void main()
 			x = x +1;
 		z = "Welcome to Our Compiler!";
 	}
+
+	repeat
+	{
+		x = 5;
+	}
+	until y>0;
 
 	z = "Thank you!";
 	cout << z << " Bye!" << endl;
