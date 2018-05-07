@@ -1,0 +1,24 @@
+const int x = 6;
+
+for(int i=0; i<6; i=i+1)
+	cout << "Hello World!";
+
+while(x < 5 || (x + 6) < 9)
+	cout << "I'm in the while loop!";
+
+bool y = x > 10;
+
+if(y == true)
+	cout << "I'm true :-)";
+else
+	cout << "I'm false :-(";
+
+switch(x){
+	case 1:
+		cout << "I'm the one!";
+		break;
+
+	default:
+		cout << "Default mode!";
+
+}
