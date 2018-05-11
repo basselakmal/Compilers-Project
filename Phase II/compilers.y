@@ -386,7 +386,7 @@ assign 		: 	Assignment expr {$$ = strdup($2);};
 		
 expr 		:	term {$$ = strdup($1);} | expr AddSub term {$$ = strdup($1); strcat($$, strdup($2)); strcat($$, strdup($3)); $$ = strdup(matchArith($$));} | expr LogicOp term {$$ = strdup($1); strcat($$, strdup($2)); strcat($$, strdup($3)); $$ = strdup(matchLogicOP($$));};
 		
-term 		:	factor {$$ = strdup($1);} | term MulDiv factor {$$ = strdup($1); strcat($$, strdup($2)); strcat($$, strdup($3));} | term Comparison factor {$$ = strdup($1); strcat($$, strdup($2)); strcat($$, strdup($3)); $$ = strdup(matchComparison($$));};
+term 		:	factor {$$ = strdup($1);} | term MulDiv factor {$$ = strdup($1); strcat($$, strdup($2)); strcat($$, strdup($3)); $$ = strdup(matchArith($$));} | term Comparison factor {$$ = strdup($1); strcat($$, strdup($2)); strcat($$, strdup($3)); $$ = strdup(matchComparison($$));};
 			
 factor 		:	OpenBracket expr CloseBracket {$$ = strdup($2);} | Bool {$$ = "bool";}| Float {$$="float";} | Integer {$$ = "int";} | String {$$ = "string";}| Identifier {$$ = strdup(getVariableType($1));};
 
