@@ -18,6 +18,8 @@
 
 	struct SymbolTable Table[50];
 	int SymbolTableCount = 0;
+	
+	int yylineno;
 
 	int getIdentifierIndex(char identifier[]){
 		for(int i=0; i<SymbolTableCount; i++){
@@ -331,6 +333,7 @@
 
 %}
 
+
 %token Keyword Identifier Delimiter Comma AddSub MulDiv OpenBracket CloseBracket OpenCurlyBrace CloseCurlyBrace Assignment Comparison LogicOp 
 
 %token String Integer Float Constant Bool  
@@ -344,7 +347,7 @@
 
 %%
 
-start		:	line start | ;
+start		:	line start |  ;
 
 loop_allowed:	for_loop |
 				while_loop |
@@ -356,6 +359,7 @@ loop_allowed:	for_loop |
 				Identifier assign Delimiter {if(checkAssignment($1, $2, 0) == -1) printf("Error in the assignment statement!\n");};
 				
 line		:	var Delimiter {printSymbolTable();}	|
+                error Delimiter |
 				loop_allowed;
 				
 cout		:	cout LeftShift expr | cout LeftShift Endl | ;
@@ -394,7 +398,8 @@ factor 		:	OpenBracket expr CloseBracket {$$ = strdup($2);} | Bool {$$ = "bool";
 %%
 
 void yyerror(char *s){
-	fprintf(stderr, "%s\n", s);
+    //printf("UnExepected token,");
+	fprintf(stderr,"%s: token %s on line %d\n", s,yylval, yylineno);
 }
 
 int main(void){
