@@ -110,7 +110,7 @@
 	}
 
 	void printSymbolTable(){
-		return;
+		
 		printf("\n\t\t***The Symbol Table***\n");
 		printf("---------------------------------------------------------\n");
 		printf("|   %s\t|\t%s\t|\t%s\t|\n", "isConst", "Type", "Identifier");
