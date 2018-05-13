@@ -49,7 +49,7 @@
 ("&&"|"\|\|")								{yylval = strdup(yytext); return LogicOp;} 
 ("&"|"!"|"?"|"@"|"#"|"$"|"%"|"~"|"."|">>"|"<<")           {yylval = strdup(yytext); return Forbiddentokens;} 
 
-[ \t\n]+
+[ \t]+
 %%
 
 int yywrap(void){
