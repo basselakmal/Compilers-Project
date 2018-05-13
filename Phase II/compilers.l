@@ -18,12 +18,6 @@
 ("break")									{yylval=strdup(yytext); return Break;}
 ("default")								    {yylval=strdup(yytext); return Default;}
 
-("cin")										{yylval=strdup(yytext); return Cin;}
-("cout")									{yylval=strdup(yytext); return Cout;}
-("<<")										{yylval=strdup(yytext); return LeftShift;}
-(">>")										{yylval=strdup(yytext); return RightShift;}
-("endl")									{yylval=strdup(yytext); return Endl;}
-
 ("for")										{yylval=strdup(yytext); return For;}
 ("while")									{yylval=strdup(yytext); return While;}
 ("int"|"char"|"string"|"float"|"bool")		{yylval = strdup(yytext); return Keyword;}
@@ -53,7 +47,7 @@
 
 ("=="|"!="|">"|"<"|">="|"<=")				{yylval = strdup(yytext); return Comparison;}
 ("&&"|"\|\|")								{yylval = strdup(yytext); return LogicOp;} 
-("&"|"!"|"?"|"@"|"#"|"$"|"%"|"~"|".")           {yylval = strdup(yytext); return Forbiddentokens;} 
+("&"|"!"|"?"|"@"|"#"|"$"|"%"|"~"|"."|">>"|"<<")           {yylval = strdup(yytext); return Forbiddentokens;} 
 
 [ \t\n]+
 %%
