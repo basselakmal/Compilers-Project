@@ -1,4 +1,6 @@
 %{
+	#define _GNU_SOURCE
+
 	#include <stdio.h>
 	#include <math.h>
 	#include <stdlib.h>
@@ -112,13 +114,13 @@
 	void printSymbolTable(){
 		
 		printf("\n\t\t***The Symbol Table***\n");
-		printf("---------------------------------------------------------\n");
+		printf("------------------------------------------------------------------------------------\n");
 		printf("|   %s\t|\t%s\t|\t%s\t|\n", "isConst", "Type", "Identifier");
-		printf("|-------------------------------------------------------|\n");
+		printf("|-----------------------------------------------------------------------------------|\n");
 		for(int i=0; i<SymbolTableCount; i++){
-			printf("|\t%d\t|\t%s\t|\t%s\t\t|\n", Table[i].isConst, Table[i].type, Table[i].identifier);
+			printf("|\t%d\t|\t%s\t|\t%s\t|\n", Table[i].isConst, Table[i].type, Table[i].identifier);
 		}
-		printf("---------------------------------------------------------\n");
+		printf("------------------------------------------------------------------------------------\n");
 
 		printf("\n");
 		fflush(stdout);
@@ -430,7 +432,9 @@ void yyerror(char *s){
 
 int main(void){
 	//yyin = fopen("code.txt", "r");
+		
 	yyparse();
+	
 	//fclose(yyin);
 	return 0;
 }
