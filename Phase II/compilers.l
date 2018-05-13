@@ -53,7 +53,7 @@
 
 ("=="|"!="|">"|"<"|">="|"<=")				{yylval = strdup(yytext); return Comparison;}
 ("&&"|"\|\|")								{yylval = strdup(yytext); return LogicOp;} 
-("&"|"!"|"?"|"@"|"#"|"$"|"%"|"~")           {yylval = strdup(yytext); return Forbiddentokens;} 
+("&"|"!"|"?"|"@"|"#"|"$"|"%"|"~"|".")           {yylval = strdup(yytext); return Forbiddentokens;} 
 
 [ \t\n]+
 %%
