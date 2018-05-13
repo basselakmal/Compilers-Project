@@ -367,10 +367,11 @@
 
 %token String Integer Float Constant Bool  
 
-%token For While If Then Else Switch Case Colon Repeat Until Break Default Cin Cout Endl LeftShift RightShift Forbiddentokens
+%token For While If Then Else Switch Case Colon Repeat Until Break Default Forbiddentokens
 
 %nonassoc LOWER_THAN_ELSE
 %nonassoc Else;
+
 
 %start start
 
@@ -383,17 +384,12 @@ loop_allowed:	for_loop |
 				repeat_until |
 				stmt |
 				switch_case |
-				cin Delimiter |
-				Cout cout Delimiter |
 				Identifier assign Delimiter {if(checkAssignment($1, $2, 0) == -1) customError("Error in the assignment statement!");};
 				
 line		:	var Delimiter {printSymbolTable();}	|
                 error Delimiter |
 				loop_allowed;
 				
-cout		:	cout LeftShift expr | cout LeftShift Endl | ;
-
-cin			:	Cin RightShift Identifier
 
 for_loop	:	For OpenBracket var Delimiter expr Delimiter Identifier assign CloseBracket loop_allowed {if(compareTypes("bool", $5) == -1 || checkAssignment($7, $8, 0) == -1) customError("Error in the for loop!"); removeVariable($3);}|
 				For OpenBracket Identifier assign Delimiter expr Delimiter Identifier assign CloseBracket loop_allowed {if(checkAssignment($3, $4, 0) == -1 || compareTypes("bool", $6) == -1 || checkAssignment($8, $9, 0) == -1) customError("Error in the for loop!");};
