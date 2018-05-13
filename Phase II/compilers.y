@@ -112,7 +112,7 @@
 		int i = getIdentifierIndex(identifier);
 		if(i != -1)
 		{
-			yyerror("Previously declared variable!\n");
+			printf("Previously declared variable!\n");
 			return -1;
 		}
 
@@ -338,7 +338,7 @@
 
 %token String Integer Float Constant Bool  
 
-%token For While If Then Else Switch Case Colon Repeat Until Break Default Cin Cout Endl LeftShift RightShift
+%token For While If Then Else Switch Case Colon Repeat Until Break Default Cin Cout Endl LeftShift RightShift Forbiddentokens
 
 %nonassoc LOWER_THAN_ELSE
 %nonassoc Else;
