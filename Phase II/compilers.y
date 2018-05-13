@@ -21,6 +21,22 @@
 	
 	int yylineno;
 
+	void undeclaredVariable(char identifier[]){
+		fprintf(stderr,"Error: Undeclared Variable '%s'!\n", identifier);
+	}
+	
+	void previouslyDeclaredVariable(char identifier[]){
+		fprintf(stderr,"Previously Declared Variable '%s'!\n", identifier);
+	}
+	
+	void typeMismatch(char expected[], char found[]){
+		fprintf(stderr,"Expected: %s\nFound: %s\n", expected, found);
+	}
+	
+	void customError(char err[]){
+		fprintf(stderr,"Error: %s\n", err);
+	}
+
 	int getIdentifierIndex(char identifier[]){
 		for(int i=0; i<SymbolTableCount; i++){
 			if(strcmp(Table[i].identifier, identifier) == 0)
@@ -32,12 +48,13 @@
 	char* getVariableType(char identifier[]){	
 		int i = getIdentifierIndex(identifier);
 		if(i==-1){
-			printf("Undeclared variable!\n");
+			undeclaredVariable(identifier);
 			return "";
 		}
 
-		char* returnVal = malloc(strlen(Table[i].type));
+		char* returnVal = malloc(strlen(Table[i].type)+1);
 		strcpy(returnVal, Table[i].type);
+		returnVal[strlen(Table[i].type)] = '\0';
 		return returnVal;
 	}
 
@@ -47,9 +64,7 @@
 
 		if(strcmp(expected, expressionType)==0 || strcmp(expressionType, "default")==0 || strcmp(expected, "default")==0)
 			return 0;
-
-		printf("Expected: %s\n", expected);
-		printf("Found: %s\n", expressionType);
+		typeMismatch(expected, expressionType);
 		return -1;
 	}
 
@@ -57,7 +72,7 @@
 		
 		int i = getIdentifierIndex(expected);
 		if(i==-1){
-			printf("Undeclared variable!\n");
+			undeclaredVariable(expected);
 			return -1;
 		}
 
@@ -66,7 +81,7 @@
 				return 0;
 			else {
 				if(isInitialization == 0){
-					printf("Can not assign a value to a constant!\n");
+					customError("Can not assign a value to a constant!");
 					return -1;
 				}
 				else{
@@ -83,7 +98,7 @@
 	int removeVariable(char identifier[]){
 		int i = getIdentifierIndex(identifier);
 		if(i==-1){
-			printf("Undeclared variable!\n");
+			undeclaredVariable(identifier);
 			return -1;
 		}
 
@@ -95,6 +110,7 @@
 	}
 
 	void printSymbolTable(){
+		return;
 		printf("\n\t\t***The Symbol Table***\n");
 		printf("---------------------------------------------------------\n");
 		printf("|   %s\t|\t%s\t|\t%s\t|\n", "isConst", "Type", "Identifier");
@@ -105,6 +121,7 @@
 		printf("---------------------------------------------------------\n");
 
 		printf("\n");
+		fflush(stdout);
 	}
 
 	int addVariable(char type[], char identifier[], int isConst){
@@ -112,14 +129,16 @@
 		int i = getIdentifierIndex(identifier);
 		if(i != -1)
 		{
-			printf("Previously declared variable!\n");
+			previouslyDeclaredVariable(identifier);
 			return -1;
 		}
 
 		//Brand new variable!
 
 		strcpy(Table[SymbolTableCount].identifier, identifier);
+		Table[SymbolTableCount].identifier[strlen(identifier)] = '\0';
 		strcpy(Table[SymbolTableCount].type, type);
+		Table[SymbolTableCount].type[strlen(type)] = '\0';
 		Table[SymbolTableCount].isConst = isConst;
 		SymbolTableCount += 1;
 		return 0;
@@ -129,10 +148,11 @@
 		char instr_type[100];
 		char inner_instr[100];
 		char inner_instr_type[100];
+
 		int j=0;
 		strcpy(instr_type, "");
 		
-		for(int i=0; instr[i] != '\0'; i++){
+		for(int i=0; i<strlen(instr); i++){
 			strcpy(inner_instr, "");
 			strcpy(inner_instr_type, "");
 
@@ -170,17 +190,17 @@
 					inner_instr_type[j] = '\0';
 					i=i+j-1;
 					if(strcmp(instr_type, "")==0){
-						if(strcmp(inner_instr_type, "int") == 0 || strcmp(inner_instr_type, "float") == 0)
+						if(strcmp(inner_instr_type, "int") == 0 || strcmp(inner_instr_type, "float") == 0){
 							strcpy(instr_type, inner_instr_type);
+							instr_type[j] = '\0';
+						}
 						else{
-							printf("Expected: %s\n", "int or float");
-							printf("Found: %s\n", inner_instr_type);
+							typeMismatch("int or float", inner_instr_type);
 							return "";
 						}	
 					}
 					if(strcmp(instr_type, inner_instr_type) != 0){
-						printf("Expected: %s\n", instr_type);
-						printf("Found: %s\n", inner_instr_type);
+						typeMismatch(instr_type, inner_instr_type);
 						return "";
 					}
 					
@@ -188,8 +208,10 @@
 			}
 
 		}
-		char* returnVal = malloc(strlen(instr_type));
+		char* returnVal = malloc(strlen(instr_type)+1);
 		strcpy(returnVal, instr_type);
+		returnVal[strlen(instr_type)] = '\0';
+
 		return returnVal;
 	}
 	
@@ -197,10 +219,11 @@
 		char instr_type[100];
 		char inner_instr[100];
 		char inner_instr_type[100];
+
 		int j=0;
 		strcpy(instr_type, "");
 		
-		for(int i=0; instr[i] != '\0'; i++){
+		for(int i=0; i<strlen(instr); i++){
 			strcpy(inner_instr, "");
 			strcpy(inner_instr_type, "");
 
@@ -221,6 +244,7 @@
 						if(instr[i+j] == '&' || instr[i+j] == '|' || instr[i+j] == '\0')
 							break;
 						inner_instr_type[j] = instr[i+j];
+						
 						j++;
 					}
 					inner_instr_type[j] = '\0';
@@ -228,17 +252,16 @@
 					if(strcmp(instr_type, "")==0){
 						if(strcmp(inner_instr_type, "bool") == 0){
 							strcpy(instr_type, inner_instr_type);
+							instr_type[j] = '\0';
 						}
 						else{
-							printf("Expected: %s\n", "bool");
-							printf("Found: %s\n", inner_instr_type);
+							typeMismatch("bool", inner_instr_type);
 							return "";
 						}	
 					}
 					else{	
 						if(strcmp(instr_type, inner_instr_type) != 0){
-							printf("Expected: %s\n", instr_type);
-							printf("Found: %s\n", inner_instr_type);
+							typeMismatch(instr_type, inner_instr_type);
 							return "";
 						}
 					}
@@ -246,8 +269,10 @@
 			}
 
 		}
-		char* returnVal = malloc(strlen(instr_type));
+		char* returnVal = malloc(strlen(instr_type)+1);
 		strcpy(returnVal, instr_type);
+		returnVal[strlen(instr_type)] = '\0';
+
 		return returnVal;
 	}
 
@@ -258,8 +283,7 @@
 		char inner_instr_type[100];
 		int j=0;
 		strcpy(instr_type, "");
-		
-		for(int i=0; instr[i] != '\0'; i++){
+		for(int i=0; i<strlen(instr); i++){
 			strcpy(inner_instr, "");
 			strcpy(inner_instr_type, "");
 
@@ -270,14 +294,14 @@
 				
 				case '<':
 					if(strcmp(instr_type, "bool") == 0){
-						printf("Expected: ==\nFound: %c\n", '<');
+						typeMismatch("==", "<");
 						return "";
 					}
 					break;
 
 				case '>' :
 					if(strcmp(instr_type, "bool") == 0){
-						printf("Expected: ==\nFound: %c\n", '>');
+						typeMismatch("==", ">");
 						return "";
 					}
 					break;
@@ -299,23 +323,25 @@
 						inner_instr_type[j] = instr[i+j];
 						j++;
 					}
+
 					inner_instr_type[j] = '\0';
+
+
 					i=i+j-1;
 					if(strcmp(instr_type, "")==0){
 						if(strcmp(inner_instr_type, "int") == 0 || strcmp(inner_instr_type, "float") == 0 || strcmp(inner_instr_type, "bool") == 0){
 							strcpy(instr_type, inner_instr_type);
+							instr_type[j] = '\0';
 						}
 						else{
-							printf("Expected: %s\n", "int, float or bool");
-							printf("Found: %s\n", inner_instr_type);
+							typeMismatch("int, float or bool", inner_instr_type);
 							return "";
 						}	
 					}
 					else{
-						
 						if(strcmp(instr_type, inner_instr_type) != 0){
-							printf("Expected: %s\n", instr_type);
-							printf("Found: %s\n", inner_instr_type);
+
+							typeMismatch(instr_type, inner_instr_type);
 							return "";
 						}
 						if(strcmp(instr_type, "int") == 0 || strcmp(instr_type, "float") == 0)
@@ -325,8 +351,9 @@
 			}
 
 		}
-		char* returnVal = malloc(strlen(instr_type));
+		char* returnVal = malloc(strlen(instr_type)+1);
 		strcpy(returnVal, instr_type);
+		returnVal[strlen(instr_type)] = '\0';
 		return returnVal;
 	}
 
@@ -356,7 +383,7 @@ loop_allowed:	for_loop |
 				switch_case |
 				cin Delimiter |
 				Cout cout Delimiter |
-				Identifier assign Delimiter {if(checkAssignment($1, $2, 0) == -1) printf("Error in the assignment statement!\n");};
+				Identifier assign Delimiter {if(checkAssignment($1, $2, 0) == -1) customError("Error in the assignment statement!");};
 				
 line		:	var Delimiter {printSymbolTable();}	|
                 error Delimiter |
@@ -366,17 +393,17 @@ cout		:	cout LeftShift expr | cout LeftShift Endl | ;
 
 cin			:	Cin RightShift Identifier
 
-for_loop	:	For OpenBracket var Delimiter expr Delimiter Identifier assign CloseBracket loop_allowed {if(compareTypes("bool", $5) == -1 || checkAssignment($7, $8, 0) == -1) printf("Error in the for loop\n"); removeVariable($3);}|
-				For OpenBracket Identifier assign Delimiter expr Delimiter Identifier assign CloseBracket loop_allowed {if(checkAssignment($3, $4, 0) == -1 || compareTypes("bool", $6) == -1 || checkAssignment($8, $9, 0) == -1) printf("Error in the for loop!\n");};
+for_loop	:	For OpenBracket var Delimiter expr Delimiter Identifier assign CloseBracket loop_allowed {if(compareTypes("bool", $5) == -1 || checkAssignment($7, $8, 0) == -1) customError("Error in the for loop!"); removeVariable($3);}|
+				For OpenBracket Identifier assign Delimiter expr Delimiter Identifier assign CloseBracket loop_allowed {if(checkAssignment($3, $4, 0) == -1 || compareTypes("bool", $6) == -1 || checkAssignment($8, $9, 0) == -1) customError("Error in the for loop!");};
 
-while_loop	:	While OpenBracket expr CloseBracket loop_allowed {if(compareTypes("bool", $3) == -1) printf("Error in the while loop!\n");};
+while_loop	:	While OpenBracket expr CloseBracket loop_allowed {if(compareTypes("bool", $3) == -1) customError("Error in the while loop!");};
 
-repeat_until:	Repeat loop_allowed Until expr Delimiter {if(compareTypes("bool", $4) == -1) printf("Error in the repeat until loop!\n");};
+repeat_until:	Repeat loop_allowed Until expr Delimiter {if(compareTypes("bool", $4) == -1) customError("Error in the repeat until loop!");};
 
-stmt		:	If OpenBracket expr CloseBracket loop_allowed  %prec LOWER_THAN_ELSE  {if(compareTypes("bool", $3) == -1) printf("Error in the if statement!\n");}|
-				If OpenBracket expr CloseBracket loop_allowed Else loop_allowed  {if(compareTypes("bool", $3) == -1) printf("Error in the if statement!\n");};
+stmt		:	If OpenBracket expr CloseBracket loop_allowed  %prec LOWER_THAN_ELSE  {if(compareTypes("bool", $3) == -1) customError("Error in the if statement!");}|
+				If OpenBracket expr CloseBracket loop_allowed Else loop_allowed  {if(compareTypes("bool", $3) == -1) customError("Error in the if statement!");};
 	  
-switch_case	:	Switch OpenBracket Identifier CloseBracket OpenCurlyBrace case_switch CloseCurlyBrace {if(getIdentifierIndex($3)==-1) {printf("Error: undeclared variable!\n");} else{if(compareTypes(getVariableType($3), $6) == -1) printf("Error in the switch statement. Cases type and switch type don't match!\n");} };
+switch_case	:	Switch OpenBracket Identifier CloseBracket OpenCurlyBrace case_switch CloseCurlyBrace {if(getIdentifierIndex($3)==-1) {customError("Error: undeclared variable!");} else{if(compareTypes(getVariableType($3), $6) == -1) customError("Error in the switch statement. Cases type and switch type don't match!");} };
 
 case_switch	:	case_struct case_switch {if(strcmp($1, $2) != 0 && strcmp($1, "default") != 0 && strcmp($2, "default") != 0) $$ = strdup("Type Mismatch"); else $$ = strdup($1);} | Default Colon loop_allowed {$$ = strdup("default");};
 
@@ -398,7 +425,6 @@ factor 		:	OpenBracket expr CloseBracket {$$ = strdup($2);} | Bool {$$ = "bool";
 %%
 
 void yyerror(char *s){
-    //printf("UnExepected token,");
 	fprintf(stderr,"%s: token %s on line %d\n", s,yylval, yylineno);
 }
 
