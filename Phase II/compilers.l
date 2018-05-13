@@ -34,8 +34,8 @@
 
 (\".*\") 									{yylval = strdup(yytext); return String;}
 [\n]                                        {yylineno++;}
-("-")?[0-9]+\.[0-9]+						{yylval = atof(yytext); return Float;}
-("-")?[0-9]+								{yylval = atoi(yytext); return Integer;}
+("-")?[0-9]+\.[0-9]+						{yylval = strdup(yytext); return Float;}
+("-")?[0-9]+								{yylval = strdup(yytext); return Integer;}
 
 (";")										{return Delimiter;}
 (",")										{yylval=strdup(yytext);return Comma;}
